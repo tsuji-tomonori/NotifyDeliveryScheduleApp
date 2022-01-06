@@ -1,0 +1,14 @@
+youtube_schedule_service:
+  hogehoge: "123"
+
+create_rule_service:
+  hogehoge: "456"
+
+post_twitter_service:
+  hogehoge: "789"
+
+register_schedule_master_service:
+  hogehoge: "741"
+
+manual_schedule_service:
+  hogehoge: "852"
