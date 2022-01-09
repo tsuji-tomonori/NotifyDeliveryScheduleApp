@@ -1,5 +1,6 @@
 youtube_schedule_service:
-  hogehoge: "123"
+  TIMEDELTA_DAYS: "7"
+  LOG_LEVEL: "INFO"
 
 create_rule_service:
   hogehoge: "456"
