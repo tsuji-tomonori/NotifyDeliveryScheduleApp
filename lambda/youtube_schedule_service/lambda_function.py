@@ -12,6 +12,7 @@ from schedule_utils import (
     get_target_channel_id_from_dyn, 
     calc_version,
     register_schedule_to_db,
+    same_as_current_version,
 )
 
 # set logging
@@ -54,8 +55,11 @@ def service(
         )
         logger.debug(json.dumps(res_search))
         for item in res_search.get("items", []):
+
             logger.debug(json.dumps(item))
+
             if is_upcoming(item) and (video_id := get_videoid_from_item(item)):
+
                 res_get_video = get_video(YT_API_KEY=yt_api_key, video_id=video_id)
 
                 # get param
@@ -66,6 +70,9 @@ def service(
                 version = calc_version(title, scheduled_start_time)
                 dt_now = datetime.datetime.now()
                 time_stamp = dt_now.strftime('%Y-%m-%d %H:%M:%S [UTC]')
+
+                if same_as_current_version(notify_controller_table_name, video_id, version):
+                    continue
 
                 # master
                 register_schedule_to_db(

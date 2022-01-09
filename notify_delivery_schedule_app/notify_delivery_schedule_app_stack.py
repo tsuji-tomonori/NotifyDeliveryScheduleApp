@@ -156,7 +156,7 @@ class NotifyDeliveryScheduleAppStack(Stack):
         ssm_youtube_api_key.grant_read(iam_youtube_schedule_service)
         sns_youtube_schedule_service.grant_publish(iam_youtube_schedule_service)
         dyn_youtube_schedule_service.grant_read_data(iam_youtube_schedule_service)
-        dyn_notify_controller_table.grant_write_data(iam_youtube_schedule_service)
+        dyn_notify_controller_table.grant_read_write_data(iam_youtube_schedule_service)
 
         dyn_youtube_schedule_service.grant_write_data(iam_register_schedule_master_service_cdk)
         

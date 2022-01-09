@@ -42,6 +42,12 @@ def register_schedule_to_db(table_name: str, item: dict) -> None:
     table.put_item(Item=item)
 
 
+def same_as_current_version(table_name: str, video_id: str, version: str) -> bool:
+    table = boto3.resource("dynamodb").Table(table_name)
+    res = table.get_item(Key={"video_id":video_id, "version":"master"}).get("Item")
+    return bool(res and res["current_version"] == version)
+
+
 def put_event_to_sqs(time: datetime, contents: dict, sqs_arn: str, event_name: str, description: str) -> None:
     client = boto3.client("events")
     client.put_rule(
