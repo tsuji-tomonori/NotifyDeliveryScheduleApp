@@ -58,7 +58,7 @@ class NotifyDeliveryScheduleAppStack(Stack):
         dyn_notify_controller_table = create_dynamodb_exist_sort_key(
             self,
             service_name=config.NOTIFY_CONTROLLER_TABLE_NAME,
-            partition_key=config.NOTIFY_CONTROLLER_TABLE_NAME,
+            partition_key=config.NOTIFY_CONTROLLER_TABLE_PARTITION_KEY,
             sort_key=config.NOTIFY_CONTROLLER_TABLE_SORT_KEY,
             read_capacity=config.NOTIFY_CONTROLLER_TABLE_READ_CAPACITY,
             write_capacity=config.NOTIFY_CONTROLLER_TABLE_WRITE_CAPACITY,
