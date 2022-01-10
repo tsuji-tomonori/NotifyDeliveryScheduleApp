@@ -13,6 +13,7 @@ from schedule_utils import (
     calc_version,
     register_schedule_to_db,
     same_as_current_version,
+    publish_to_sns,
 )
 
 # set logging
@@ -37,6 +38,7 @@ def service(
     timedelta_days: float,
     schedule_master_table_name: str,
     notify_controller_table_name: str,
+    topic_arn: str,
 ):
 
     logger.debug("Service Start!")
@@ -97,6 +99,18 @@ def service(
                     },
                 )
 
+                # subscribe
+                publish_to_sns(
+                    topic_arn=topic_arn,
+                    item={
+                        "channel_id": channel_id,
+                        "video_id": video_id,
+                        "version": version,
+                        "title": title,
+                        "scheduled_start_time": scheduled_start_time,
+                    }
+                )
+
                 logger.info(
                     f"[INFO] put event title={title} scheduled_start_time={scheduled_start_time}")
 
@@ -107,4 +121,5 @@ def handler(event, context):
         timedelta_days=os.environ["TIMEDELTA_DAYS"],
         schedule_master_table_name=os.environ["SCHEDULE_MASTER_TABLE"],
         notify_controller_table_name=os.environ["NOTIFY_CONTROLLER_TABLE"],
+        topic_arn=os.environ["SNS_TOPICK_ARN"],
     )
