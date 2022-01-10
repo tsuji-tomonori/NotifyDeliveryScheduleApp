@@ -14,6 +14,7 @@ from notify_delivery_schedule_app.stack_base import (
     create_dynamodb_exist_sort_key,
     create_schdule_rule_every_15_minutes,
     create_sqs,
+    subscribe_sns,
 )
 import notify_delivery_schedule_app.stack_config as config
 
@@ -66,6 +67,12 @@ class NotifyDeliveryScheduleAppStack(Stack):
         sns_youtube_schedule_service = create_sns(
             self,
             service_name=config.YOUTUBE_SCHEDULE_SERVICE_NAME
+        )
+        subscribe_sns(
+            self,
+            service_name=config.YOUTUBE_SCHEDULE_SERVICE_NAME,
+            topic=sns_youtube_schedule_service,
+            target_lambda=lmd_youtube_schedule_service,
         )
 
 
@@ -195,7 +202,7 @@ class NotifyDeliveryScheduleAppStack(Stack):
         )
         lmd_youtube_schedule_service.add_environment(
             key=config.SNS_TOPICK_NAME_KEY.upper(),
-            value=sns_youtube_schedule_service.topic_name,
+            value=sns_youtube_schedule_service.topic_arn,
         )
         lmd_youtube_schedule_service.add_environment(
             key=config.SSM_YOUTUBE_API_KEY.upper(),

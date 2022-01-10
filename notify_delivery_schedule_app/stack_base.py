@@ -261,3 +261,24 @@ def create_sns(
         self, build_resource_name(config.SNS_PREFIX, service_name),
         topic_name=build_resource_name(config.SNS_PREFIX, service_name),
     )
+
+
+def subscribe_sns(
+    self,
+    service_name: str,
+    topic: sns.Topic,
+    target_lambda: lambda_.Function
+) -> None:
+    """snsトピックをサブスクリプションする関数.
+
+    Args:
+        service_name (str): サービス名
+        topic (sns.Topic): 対象のトピック
+        target_lambda (lambda_.Function): トピックが通知するLambda
+    """
+    sns.Subscription(
+        self, build_resource_name(config.SNS_SUBSCRIPTION_PREFIX, service_name),
+        topic=topic,
+        endpoint=target_lambda.function_arn,
+        protocol=sns.SubscriptionProtocol.LAMBDA,
+    )

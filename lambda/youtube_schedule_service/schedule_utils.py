@@ -48,6 +48,14 @@ def same_as_current_version(table_name: str, video_id: str, version: str) -> boo
     return bool(res and res["current_version"] == version)
 
 
+def publish_to_sns(topic_arn: str, item: dict, subject: str="youtube_schedule") -> None:
+    topic = boto3.resource('sns').Topic(topic_arn)
+    topic.publish(
+        Subject=subject,
+        Message=json.dumps(item),
+    )
+
+
 def put_event_to_sqs(time: datetime, contents: dict, sqs_arn: str, event_name: str, description: str) -> None:
     client = boto3.client("events")
     client.put_rule(
