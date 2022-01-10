@@ -52,7 +52,7 @@ def publish_to_sns(topic_arn: str, item: dict, subject: str="youtube_schedule") 
     topic = boto3.resource('sns').Topic(topic_arn)
     topic.publish(
         Subject=subject,
-        Message=json.dumps(item),
+        Message=json.dumps(item, ensure_ascii=False),
     )
 
 
