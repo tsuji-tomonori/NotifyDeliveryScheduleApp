@@ -263,7 +263,7 @@ def create_sns(
     )
 
 
-def subscribe_sns(
+def subscribe_sns_to_lambda(
     self,
     service_name: str,
     topic: sns.Topic,

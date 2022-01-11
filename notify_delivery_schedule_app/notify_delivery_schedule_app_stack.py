@@ -13,8 +13,7 @@ from notify_delivery_schedule_app.stack_base import (
     create_sns,
     create_dynamodb_exist_sort_key,
     create_schdule_rule_every_15_minutes,
-    create_sqs,
-    subscribe_sns,
+    subscribe_sns_to_lambda,
 )
 import notify_delivery_schedule_app.stack_config as config
 
@@ -68,7 +67,7 @@ class NotifyDeliveryScheduleAppStack(Stack):
             self,
             service_name=config.YOUTUBE_SCHEDULE_SERVICE_NAME
         )
-        subscribe_sns(
+        subscribe_sns_to_lambda(
             self,
             service_name=config.YOUTUBE_SCHEDULE_SERVICE_NAME,
             topic=sns_youtube_schedule_service,
@@ -119,7 +118,7 @@ class NotifyDeliveryScheduleAppStack(Stack):
         lmd_create_rule_service.add_event_source(event_source.SnsEventSource(sns_youtube_schedule_service))
 
 
-        sqs_post_twitter_service = create_sqs(
+        sns_post_twitter_service = create_sns(
             self,
             service_name=config.POST_TWITTER_SERVICE_NAME,
         )
@@ -135,7 +134,12 @@ class NotifyDeliveryScheduleAppStack(Stack):
             service_description=config.POST_TWITTER_SERVICE_DESCRIPTION,
             lambda_role=iam_post_twitter_service,
         )
-        lmd_post_twitter_service.add_event_source(event_source.SqsEventSource(sqs_post_twitter_service))
+        subscribe_sns_to_lambda(
+            self,
+            service_name=config.POST_TWITTER_SERVICE_NAME,
+            topic=sns_post_twitter_service,
+            target_lambda=lmd_post_twitter_service,
+        )
         ssm_twitter_api_key = ssm.StringParameter.from_secure_string_parameter_attributes(
             self, config.SSM_TWITTER_API_KEY,
             version=1,
@@ -177,7 +181,7 @@ class NotifyDeliveryScheduleAppStack(Stack):
             )
         )
 
-        sqs_post_twitter_service.grant_consume_messages(iam_post_twitter_service)
+        sns_post_twitter_service.grant_publish(iam_post_twitter_service)
         ssm_twitter_api_key.grant_read(iam_post_twitter_service)
         ssm_twitter_api_secret_key.grant_read(iam_post_twitter_service)
         ssm_twitter_access_token.grant_read(iam_post_twitter_service)
