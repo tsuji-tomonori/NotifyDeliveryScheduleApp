@@ -175,7 +175,7 @@ class NotifyDeliveryScheduleAppStack(Stack):
 
         iam_create_rule_service.add_to_policy(
             iam.PolicyStatement(
-                actions=["events:PutRule", "events:PutTargets"],
+                actions=["events:PutRule", "events:PutTargets", "events:TagResource"],
                 effect=iam.Effect.ALLOW,
                 resources=[config.CREATE_RULE_NAME],
             )
