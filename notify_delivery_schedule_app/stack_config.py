@@ -26,7 +26,7 @@ LAMBDA_MEMORY_SIZE = 256
 SQS_VISIBILITY_TIMEOUT = 500
 
 # Rule paramater
-RULE_ENABLED = True
+RULE_ENABLED = False
 CREATE_RULE_NAME = "*"
 
 # DynamoDB paramater
