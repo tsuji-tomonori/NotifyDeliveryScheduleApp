@@ -227,6 +227,11 @@ class NotifyDeliveryScheduleAppStack(Stack):
             value=dyn_notify_controller_table.table_name,
         )
 
+        lmd_create_rule_service.add_environment(
+            key=config.POST_TWITTER_SERVICE_NAME.upper(),
+            value=sns_post_twitter_service.topic_arn,
+        )
+
         lmd_post_twitter_service.add_environment(
             key=config.NOTIFY_CONTROLLER_TABLE_NAME.upper(),
             value=dyn_notify_controller_table.table_name,

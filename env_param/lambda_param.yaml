@@ -3,7 +3,7 @@ youtube_schedule_service:
   LOG_LEVEL: "INFO"
 
 create_rule_service:
-  hogehoge: "456"
+  LOG_LEVEL: "INFO"
 
 post_twitter_service:
   hogehoge: "789"
