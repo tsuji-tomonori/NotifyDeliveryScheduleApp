@@ -1,5 +1,5 @@
 youtube_schedule_service:
-  TIMEDELTA_DAYS: "7"
+  TIMEDELTA_DAYS: "1"
   LOG_LEVEL: "INFO"
 
 create_rule_service:
