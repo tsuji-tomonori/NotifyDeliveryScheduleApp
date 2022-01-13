@@ -44,7 +44,7 @@ def put_event_to_sns(time: datetime, contents: dict, sns_arn: str, event_name: s
             {
                 "Id": "to_sns",
                 "Arn": sns_arn,
-                "Input": json.dumps(contents)
+                "Input": json.dumps(contents, ensure_ascii=False)
             }
         ]
     )
