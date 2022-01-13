@@ -135,7 +135,7 @@ def create_sqs(
 
 
 @set_tags
-def create_schdule_rule_every_15_minutes(
+def create_schdule_rule_every_hour(
     self,
     service_name: str,
     service_description: str,
@@ -152,7 +152,7 @@ def create_schdule_rule_every_15_minutes(
     return event.Rule(
         self, build_resource_name(config.RULE_PREFIX, service_name),
         schedule=event.Schedule.cron(
-            minute="0/15",
+            minute="0",
             hour="*",
             day="*",
             month="*",

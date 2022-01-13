@@ -12,7 +12,7 @@ from notify_delivery_schedule_app.stack_base import (
     create_iam_role_for_lambda,
     create_sns,
     create_dynamodb_exist_sort_key,
-    create_schdule_rule_every_15_minutes,
+    create_schdule_rule_every_hour,
     subscribe_sns_to_lambda,
 )
 import notify_delivery_schedule_app.stack_config as config
@@ -24,7 +24,7 @@ class NotifyDeliveryScheduleAppStack(Stack):
 
         # Declaring a resource
 
-        rul_youtube_schedule_service_cdk = create_schdule_rule_every_15_minutes(
+        rul_youtube_schedule_service_cdk = create_schdule_rule_every_hour(
             self,
             service_name=config.YOUTUBE_SCHEDULE_SERVICE_NAME,
             service_description=config.YOUTUBE_SCHEDULE_SERVICE_DESCRIPTION,
@@ -140,6 +140,7 @@ class NotifyDeliveryScheduleAppStack(Stack):
             topic=sns_post_twitter_service,
             target_lambda=lmd_post_twitter_service,
         )
+        lmd_post_twitter_service.add_event_source(event_source.SnsEventSource(sns_post_twitter_service))
         ssm_twitter_api_key = ssm.StringParameter.from_secure_string_parameter_attributes(
             self, config.SSM_TWITTER_API_KEY,
             version=1,
@@ -191,6 +192,15 @@ class NotifyDeliveryScheduleAppStack(Stack):
                 actions=["events:*"],
                 effect=iam.Effect.ALLOW,
                 resources=[config.CREATE_RULE_NAME],
+            )
+        )
+
+        sns_post_twitter_service.add_to_resource_policy(
+            iam.PolicyStatement(
+                actions=["sns:Publish"],
+                effect=iam.Effect.ALLOW,
+                resources=[sns_post_twitter_service.topic_arn],
+                principals=[iam.ServicePrincipal("events.amazonaws.com")]
             )
         )
 
