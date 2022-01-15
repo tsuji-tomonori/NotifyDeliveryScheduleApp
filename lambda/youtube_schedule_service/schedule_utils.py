@@ -48,5 +48,6 @@ def publish_to_sns(topic_arn: str, item: dict, subject: str="youtube_schedule") 
     topic.publish(
         Subject=subject,
         Message=json.dumps(item, ensure_ascii=False),
+        MessageStructure="json",
     )
 

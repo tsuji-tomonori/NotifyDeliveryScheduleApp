@@ -99,14 +99,23 @@ def service(
 
                 # 先にSNSトピックにメッセージを投げる
                 # この処理で失敗した場合, dbに登録されず次の定期実行にて再処理される
+                lambda_input = {
+                    "channel_id": channel_id,
+                    "video_id": video_id,
+                    "version": version,
+                    "title": title,
+                    "scheduled_start_time": scheduled_start_time,
+                }
+                dt = datetime.datetime.fromisoformat(scheduled_start_time.replace('Z', '+00:00'))
+                dt_j = dt.astimezone(datetime.timezone(datetime.timedelta(hours=9)))
+                notify_str = f"枠が立ちました: {title} [{dt_j.isoformat()}]"
                 publish_to_sns(
                     topic_arn=topic_arn,
                     item={
-                        "channel_id": channel_id,
-                        "video_id": video_id,
-                        "version": version,
-                        "title": title,
-                        "scheduled_start_time": scheduled_start_time,
+                        "default": json.dumps(lambda_input, ensure_ascii=False),
+                        "email": notify_str,
+                        "lambda": json.dumps(lambda_input, ensure_ascii=False),
+                        "sms": notify_str,
                     }
                 )
 
