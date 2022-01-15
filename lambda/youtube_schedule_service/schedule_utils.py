@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 import hashlib
 
 import boto3
@@ -20,11 +20,6 @@ def get_value_from_ssm(key: str = "YT_API_KEY") -> str:
 def calc_published_after_str(timedelta_days: float = 7.0) -> str:
     return (date.today() - timedelta(days=timedelta_days)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-
-def put_sqs(que_url: str, **args) -> None:
-    client = boto3.client("sqs")
-    client.send_message(
-        QueueUrl=que_url, MessageBody=json.dumps(args, ensure_ascii=False))
 
     
 def get_target_channel_id_from_dyn(table_name: str) -> list[str]:
@@ -55,23 +50,3 @@ def publish_to_sns(topic_arn: str, item: dict, subject: str="youtube_schedule") 
         Message=json.dumps(item, ensure_ascii=False),
     )
 
-
-def put_event_to_sqs(time: datetime, contents: dict, sqs_arn: str, event_name: str, description: str) -> None:
-    client = boto3.client("events")
-    client.put_rule(
-        Name=event_name,
-        ScheduleExpression=time.strftime("cron(%M %H %d %m ? %Y)"),
-        EventPattern='',
-        State='ENABLED',
-        Description=description,
-    )
-    client.put_targets(
-        Rule=event_name,
-        Targets=[
-            {
-                "Id": "to_sqs",
-                "Arn": sqs_arn,
-                "Input": json.dumps(contents)
-            }
-        ]
-    )
