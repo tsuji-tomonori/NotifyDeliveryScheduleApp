@@ -42,6 +42,7 @@ NOTIFY_CONTROLLER_TABLE_WRITE_CAPACITY = 1
 # service_name
 YOUTUBE_SCHEDULE_SERVICE_NAME = "youtube_schedule_service"
 CREATE_RULE_SERVICE_NAME = "create_rule_service"
+NOTIFY_SCHEDULE_SERVICE_NAME = "notify_schedule_service"
 POST_TWITTER_SERVICE_NAME = "post_twitter_service"
 REGISTER_SCHEDULE_MASTER_SERVICE_NAME = "register_schedule_master_service"
 SCHEDULE_MASTER_TABLE_NAME = "schedule_master_table"
@@ -51,6 +52,7 @@ NOTIFY_CONTROLLER_TABLE_NAME = "notify_controller_table"
 # service_description
 YOUTUBE_SCHEDULE_SERVICE_DESCRIPTION = "Get the delivery schedule."
 CREATE_RULE_SERVICE_DESCRIPTION = "Create an event rule."
+NOTIFY_SCHEDULE_SERVICE_DESCRIPTION = "Notify the delivery schedule."
 POST_TWITTER_SERVICE_DESCRIPTION = "Post to Twitter."
 REGISTER_SCHEDULE_MASTER_SERVICE_DESCRIPTION = "Register a master in schedule_master_table."
 MANUAL_SCHEDULE_SERVICE_DESCRIPTION = "Register a delivery schedule manually."
@@ -68,6 +70,7 @@ with open(str(lambda_param_file_path), "r", encoding="utf-8") as f:
     lambda_param = yaml.safe_load(f)
 YOUTUBE_SCHEDULE_SERVICE_PARAMATER = lambda_param[YOUTUBE_SCHEDULE_SERVICE_NAME]
 CREATE_RULE_SERVICE_PARAMATER = lambda_param[CREATE_RULE_SERVICE_NAME]
+NOTIFY_SCHEDULE_SERVICE_PARAMATER = lambda_param[NOTIFY_SCHEDULE_SERVICE_NAME]
 POST_TWITTER_SERVICE_PARAMATER = lambda_param[POST_TWITTER_SERVICE_NAME]
 REGISTER_SCHEDULE_MASTER_SERVICE_PARAMATER = lambda_param[REGISTER_SCHEDULE_MASTER_SERVICE_NAME]
 MANUAL_SCHEDULE_SERVICE_PARAMATER = lambda_param[MANUAL_SCHEDULE_SERVICE_NAME]

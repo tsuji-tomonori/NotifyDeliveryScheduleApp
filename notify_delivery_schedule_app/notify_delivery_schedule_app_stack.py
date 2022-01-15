@@ -118,6 +118,25 @@ class NotifyDeliveryScheduleAppStack(Stack):
         lmd_create_rule_service.add_event_source(event_source.SnsEventSource(sns_youtube_schedule_service))
 
 
+        iam_notify_schedule_service = create_iam_role_for_lambda(
+            self,
+            service_name=config.NOTIFY_SCHEDULE_SERVICE_NAME,
+            service_description=config.NOTIFY_SCHEDULE_SERVICE_DESCRIPTION,
+        )
+        lmd_notify_schedule_service = create_lambda(
+            self,
+            service_name=config.NOTIFY_SCHEDULE_SERVICE_NAME,
+            environment=config.NOTIFY_SCHEDULE_SERVICE_PARAMATER,
+            service_description=config.NOTIFY_SCHEDULE_SERVICE_DESCRIPTION,
+            lambda_role=iam_notify_schedule_service,
+        )
+        lmd_notify_schedule_service.add_permission(
+            "permission_lmd_notify_schedule_service",
+            action="lambda:InvokeFunction",
+            principal=iam.ServicePrincipal("events.amazonaws.com"),
+        )
+
+
         sns_post_twitter_service = create_sns(
             self,
             service_name=config.POST_TWITTER_SERVICE_NAME,
@@ -182,6 +201,8 @@ class NotifyDeliveryScheduleAppStack(Stack):
             )
         )
 
+        sns_post_twitter_service.grant_publish(iam_notify_schedule_service)
+
         sns_post_twitter_service.grant_publish(iam_post_twitter_service)
         ssm_twitter_api_key.grant_read(iam_post_twitter_service)
         ssm_twitter_api_secret_key.grant_read(iam_post_twitter_service)
@@ -238,6 +259,11 @@ class NotifyDeliveryScheduleAppStack(Stack):
         )
 
         lmd_create_rule_service.add_environment(
+            key=config.NOTIFY_SCHEDULE_SERVICE_NAME.upper(),
+            value=lmd_notify_schedule_service.function_arn,
+        )
+
+        lmd_notify_schedule_service.add_environment(
             key=config.POST_TWITTER_SERVICE_NAME.upper(),
             value=sns_post_twitter_service.topic_arn,
         )

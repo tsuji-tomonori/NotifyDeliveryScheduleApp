@@ -6,7 +6,7 @@ from datetime import datetime
 import boto3
 
 
-def put_event_to_sns(time: datetime, contents: dict, sns_arn: str, event_name: str, description: str) -> None:
+def put_event_to_sns(time: datetime, contents: dict, lambda_arn: str, event_name: str, description: str) -> None:
     """時間指定でSNSトピックにメッセージを送る関数.
 
     Args:
@@ -42,8 +42,8 @@ def put_event_to_sns(time: datetime, contents: dict, sns_arn: str, event_name: s
         Rule=event_name,
         Targets=[
             {
-                "Id": "to_sns",
-                "Arn": sns_arn,
+                "Id": "to_lambda",
+                "Arn": lambda_arn,
                 "Input": json.dumps(contents, ensure_ascii=False)
             }
         ]

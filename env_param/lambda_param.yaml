@@ -13,3 +13,6 @@ register_schedule_master_service:
 
 manual_schedule_service:
   hogehoge: "852"
+
+notify_schedule_service:
+  LOG_LEVEL: "INFO"

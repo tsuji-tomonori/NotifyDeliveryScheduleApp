@@ -16,7 +16,7 @@ logger.setLevel(os.environ["LOG_LEVEL"])
 
 def service(
     event: dict,
-    topic_arn: str
+    lambda_arn: str
 ):
 
     logger.debug("Service Start!")
@@ -28,7 +28,7 @@ def service(
         put_event_to_sns(
             time=scheduled_start_time,
             contents=message,
-            sns_arn=topic_arn,
+            lambda_arn=lambda_arn,
             event_name=f"rul_{message['channel_id']}_{message['video_id']}_sdk",
             description=message["title"]
 
@@ -38,5 +38,5 @@ def service(
 def handler(event, context):
     service(
         event=event,
-        topic_arn=os.environ["POST_TWITTER_SERVICE"],
+        lambda_arn=os.environ["NOTIFY_SCHEDULE_SERVICE"],
     )
