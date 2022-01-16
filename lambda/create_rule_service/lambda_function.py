@@ -6,7 +6,7 @@ import json
 import datetime
 
 from create_utils import (
-    put_event_to_sns,
+    put_rule_to_sns,
 )
 
 # set logging
@@ -25,12 +25,13 @@ def service(
 
         message = json.loads(record["Sns"]["Message"])
         message["status"] = "配信がはじまりました"
+        message["rule_name"] = f"rul_{message['channel_id']}_{message['video_id']}_sdk"
         scheduled_start_time = datetime.datetime.strptime(message["scheduled_start_time"], '%Y-%m-%dT%H:%M:%SZ')
-        put_event_to_sns(
+        put_rule_to_sns(
             time=scheduled_start_time,
             contents=message,
             lambda_arn=lambda_arn,
-            event_name=f"rul_{message['channel_id']}_{message['video_id']}_sdk",
+            rule_name=message["rule_name"],
             description=message["title"]
 
         )

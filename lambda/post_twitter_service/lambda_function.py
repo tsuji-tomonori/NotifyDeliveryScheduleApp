@@ -10,6 +10,7 @@ import tweepy
 from post_utils import (
     get_value_from_ssm,
     get_version_from_db,
+    delete_rule_to_lambda,
 )
 
 # set logging
@@ -22,7 +23,7 @@ def service(
 ) -> int:
 
     logger.debug("Service Start!")
-    logger.info(event)
+    logger.info(json.dumps(event))
 
     # 取得した各種キーを格納-----------------------------------------------------
     consumer_key = get_value_from_ssm(os.environ["TWITTER_API_KEY"])
@@ -43,6 +44,8 @@ def service(
             continue
         post_message = f"{sns_message['status']}\n{sns_message['title']}"
         api.update_status(post_message)
+        delete_rule_to_lambda(sns_message["rule_name"])
+        logger.info(f"delete: {sns_message['rule_name']}")
 
     # ツイートを投稿
     # api.update_status("test")

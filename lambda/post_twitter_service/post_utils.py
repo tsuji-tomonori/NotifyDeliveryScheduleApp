@@ -56,3 +56,9 @@ def publish_to_sns(topic_arn: str, item: dict, subject: str="youtube_schedule") 
         MessageStructure="json",
     )
 
+
+def delete_rule_to_lambda(rule_name: str) -> None:
+    client = boto3.client('events')
+    client.remove_targets(Rule=rule_name, Ids=["to_lambda",])
+    client.delete_rule(Name=rule_name)
+
