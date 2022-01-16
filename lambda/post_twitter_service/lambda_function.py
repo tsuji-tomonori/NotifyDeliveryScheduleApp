@@ -42,7 +42,7 @@ def service(
         current_version = get_version_from_db(os.environ["NOTIFY_CONTROLLER_TABLE"], sns_message["video_id"])
         if current_version != sns_message['version']:
             continue
-        post_message = f"{sns_message['status']}\n{sns_message['title']}"
+        post_message = f"{sns_message['status']}\n{sns_message['title']}\nhttps://youtu.be/{sns_message['video_id']}"
         api.update_status(post_message)
         delete_rule_to_lambda(sns_message["rule_name"])
         logger.info(f"delete: {sns_message['rule_name']}")
