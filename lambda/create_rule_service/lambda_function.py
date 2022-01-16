@@ -24,6 +24,7 @@ def service(
     for record in event["Records"]:
 
         message = json.loads(record["Sns"]["Message"])
+        message["status"] = "配信がはじまりました"
         scheduled_start_time = datetime.datetime.strptime(message["scheduled_start_time"], '%Y-%m-%dT%H:%M:%SZ')
         put_event_to_sns(
             time=scheduled_start_time,

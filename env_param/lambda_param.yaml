@@ -6,7 +6,7 @@ create_rule_service:
   LOG_LEVEL: "INFO"
 
 post_twitter_service:
-  hogehoge: "789"
+  LOG_LEVEL: "INFO"
 
 register_schedule_master_service:
   hogehoge: "741"

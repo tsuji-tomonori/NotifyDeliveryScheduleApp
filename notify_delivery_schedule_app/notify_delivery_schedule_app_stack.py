@@ -215,6 +215,7 @@ class NotifyDeliveryScheduleAppStack(Stack):
                 resources=[config.CREATE_RULE_NAME],
             )
         )
+        dyn_notify_controller_table.grant_read_data(iam_post_twitter_service)
 
 
         # Name resolution of environment variables

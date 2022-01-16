@@ -24,7 +24,7 @@ def service(
 
     dt = datetime.datetime.fromisoformat(event["scheduled_start_time"].replace('Z', '+00:00'))
     dt_j = dt.astimezone(datetime.timezone(datetime.timedelta(hours=9)))
-    notify_str = f"配信が始まりました: {event['title']} [{dt_j.isoformat()}]"
+    notify_str = f"{event['status']}: {event['title']} [{dt_j.isoformat()}]"
     publish_to_sns(
         topic_arn=topic_arn,
         item={
