@@ -216,15 +216,6 @@ class NotifyDeliveryScheduleAppStack(Stack):
             )
         )
 
-        sns_post_twitter_service.add_to_resource_policy(
-            iam.PolicyStatement(
-                actions=["sns:Publish"],
-                effect=iam.Effect.ALLOW,
-                resources=[sns_post_twitter_service.topic_arn],
-                principals=[iam.ServicePrincipal("events.amazonaws.com")]
-            )
-        )
-
 
         # Name resolution of environment variables
         lmd_youtube_schedule_service.add_environment(
