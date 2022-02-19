@@ -140,7 +140,7 @@ def create_schdule_rule_every_hour(
     service_name: str,
     service_description: str,
 ) -> event.Rule:
-    """15分毎のイベントを作成する関数.
+    """1H毎のイベントを作成する関数.
 
     Args:
         service_name (str): サービス名
@@ -152,7 +152,7 @@ def create_schdule_rule_every_hour(
     return event.Rule(
         self, build_resource_name(config.RULE_PREFIX, service_name),
         schedule=event.Schedule.cron(
-            minute="0",
+            minute="28",
             hour="*",
             day="*",
             month="*",
