@@ -28,24 +28,29 @@ def service(
         message["rule_name"] = f"rul_{message['channel_id']}_{message['video_id']}_30_sdk"
         scheduled_start_time = datetime.datetime.strptime(message["scheduled_start_time"], '%Y-%m-%dT%H:%M:%SZ')
         scheduled_start_time_30 = scheduled_start_time - datetime.timedelta(minutes=30)
-        put_rule_to_sns(
-            time=scheduled_start_time_30,
-            contents=message,
-            lambda_arn=lambda_arn,
-            rule_name=message["rule_name"],
-            description=message["title"]
+        now_time = datetime.datetime.now()
 
-        )
+        if scheduled_start_time_30 > now_time:
+            put_rule_to_sns(
+                time=scheduled_start_time_30,
+                contents=message,
+                lambda_arn=lambda_arn,
+                rule_name=message["rule_name"],
+                description=message["title"]
+
+            )
         message["status"] = "配信が始まりました"
         message["rule_name"] = f"rul_{message['channel_id']}_{message['video_id']}_sdk"
-        put_rule_to_sns(
-            time=scheduled_start_time,
-            contents=message,
-            lambda_arn=lambda_arn,
-            rule_name=message["rule_name"],
-            description=message["title"]
 
-        )
+        if scheduled_start_time > now_time:
+            put_rule_to_sns(
+                time=scheduled_start_time,
+                contents=message,
+                lambda_arn=lambda_arn,
+                rule_name=message["rule_name"],
+                description=message["title"]
+
+            )
 
 
 def handler(event, context):
